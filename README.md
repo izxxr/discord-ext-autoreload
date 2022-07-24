@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
 <details>
   <summary>For discord.py 2.0</summary>
+  <br/>
 
   In discord.py 2.0 and higher, you would need to call the `reloader.start()`
   method in an async context. The most convenient way of doing this is by
