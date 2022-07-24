@@ -131,7 +131,12 @@ class Reloader:
 
     async def _reload_extension(self, bot: commands.Bot, extension: str) -> None:
         try:
-            await bot.reload_extension(extension)
+            coro = bot.reload_extension(extension)
+            # For compatiblity with 1.7
+            # In discord.py <2.0, reload_extension() is a
+            # not a coroutine function
+            if coro and asyncio.iscoroutine(coro):
+                await coro
         except commands.ExtensionFailed:
             await self.on_error(extension)
         else:
