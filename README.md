@@ -10,7 +10,7 @@ The features of this extension are:
 - Easy to setup and use
 - Proper exceptions handling during auto-reload
 - Minimal interface matching that of discord.py
-- Compatible with both discord.py 1.7 and 2.0
+- Compatible with both discord.py v1.7 and v2.0
 
 ## Installation
 This extension can easily be installed using `pip`:
