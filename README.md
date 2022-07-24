@@ -51,3 +51,36 @@ if __name__ == "__main__":
 And done! The `Reloader` class will start watching the provided `ext_directory` for
 changes in loaded extensions and as soon as an extension is updated, It will automatically
 be reloaded.
+
+### Stopping the reloader
+Sometimes, you might want to stop the reloader. You can use the `Reloader.stop()` method
+to easily do so. For example:
+
+```py
+@bot.command()
+async def togglereload(ctx):
+    if reloader.stopped:
+        reloader.start(bot)
+        await ctx.send("Enabled")
+    else:
+        reloader.stop()
+        await ctx.send("Disabled")
+```
+
+### Error Handling
+When auto reloading fails for some reason, the error is properly handled and propagated
+to `Reloader.on_error`. This function by default logs the error but can be overridden to
+implement custom functionality.
+
+```py
+import traceback
+
+class Reloader(autoreload.Reloader):
+    async def on_error(self, extension: str):
+        print(f"Extension {extension!r} failed to auto reload")
+        traceback.print_exc()
+```
+
+### Tracking reloads
+When an extension is reloaded, the `Reloader.on_reload` method is called. This method can
+be implemented by a subclass to easily track successful automatic reloads.
