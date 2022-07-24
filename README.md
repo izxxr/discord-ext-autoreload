@@ -84,3 +84,11 @@ class Reloader(autoreload.Reloader):
 ### Tracking reloads
 When an extension is reloaded, the `Reloader.on_reload` method is called. This method can
 be implemented by a subclass to easily track successful automatic reloads.
+
+### Excluding extensions from reloading
+Sometimes, you want certain extensions to not be subject of automatic reloading. Fortunately,
+this package allows you to exclude certain extensions by passing the `exclude_exts` keyword
+argument in `Reloader` class.
+```py
+reloader = Reloader(ext_directory="cogs", exclude_exts=["cogs.some_extension"])
+```

@@ -12,7 +12,7 @@ setup(
     author='nerdguyahmad',
     url='https://github.com/nerdguyahmad/discord-ext-autoreload',
     keywords=["discord.py", "discord", "reload", "asyncio"],
-    version="0.1.1",
+    version="0.1.2",
     packages=['discord.ext.autoreload'],
     long_description=long_description,
     long_description_content_type="text/markdown",
