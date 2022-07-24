@@ -7,6 +7,6 @@ of extensions at runtime.
 """
 
 __author__ = "nerdguyahmad"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from .reloader import *
