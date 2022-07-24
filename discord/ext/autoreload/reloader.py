@@ -12,7 +12,6 @@ import asyncio
 import logging
 import watchfiles
 
-
 __all__ = (
     "Reloader",
 )
@@ -102,6 +101,9 @@ class Reloader:
 
         This method is idempotent and does not raise any error
         if the reloader is already stopped.
+
+        To check whether the reloader is running or not, use the
+        :attr:`.stopped` property.
         """
         self.__stopped.set()
         if self.__reloader_task:
