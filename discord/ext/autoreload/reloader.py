@@ -23,22 +23,21 @@ def _get_ext_name(path: str) -> str:
     # On POSIX, relpath() returns the path with forward
     # slashes so we normalize them to backslashes
     path = os.path.relpath(path).replace("/", "\\")
-    basename = os.path.basename(path)
-
     comps = path.split("\\")
-    last_index = len(comps) - 1
-    ret = ''
 
-    for index, comp in enumerate(comps):
-        if comp == basename and index == last_index:
-            # Strip the ".py" extension from base name
-            comp = basename[:-3]
+    basename = comps.pop(-1)
+    if comps[-1].endswith(".py"):
+        # Strip the .py extension from the base name
+        basename = comps.pop(-1)
+        comps.append(basename[:-3])
 
-        if ret:
-            ret += "."
-        ret += comp
-
-    return ret
+    # For users that have subpackages inside their ext directory
+    # with extension entry point in __init__.py, We will ignore
+    # the __init__ to resolve the name to "ext_directory.subpackage".
+    # This will break for users who add their extensions with 
+    # name "ext_directory.subpackage.__init__" but that is a niche
+    # case so it's a reasonable compromise
+    return ".".join(comp for comp in comps if comp != "__init__")
 
 
 class Reloader:
@@ -152,10 +151,6 @@ class Reloader:
         async for change_tup in watchfiles.awatch(self.ext_directory, stop_event=self.__stopped):  # type: ignore
             for change, path in change_tup:
                 if change != watchfiles.Change.modified:
-                    continue
-
-                filename = os.path.basename(path)
-                if not filename.endswith(".py"):
                     continue
 
                 extension = _get_ext_name(path)
