@@ -19,16 +19,17 @@ __all__ = (
 
 _log = logging.getLogger(__name__)
 
-def _get_ext_name(path: str) -> str:
+def _get_extension_name(path: str) -> str:
+    # Pre-condition: path points to a valid python file
+
     # On POSIX, relpath() returns the path with forward
     # slashes so we normalize them to backslashes
     path = os.path.relpath(path).replace("/", "\\")
     comps = path.split("\\")
 
-    if comps[-1].endswith(".py"):
-        # Strip the .py extension from the base name
-        basename = comps.pop(-1)
-        comps.append(basename[:-3])
+    # Strip the .py extension from the base name
+    basename = comps.pop(-1)
+    comps.append(basename[:-3])
 
     # For users that have subpackages inside their ext directory
     # with extension entry point in __init__.py, We will ignore
@@ -149,10 +150,10 @@ class Reloader:
         # partially unknown
         async for change_tup in watchfiles.awatch(self.ext_directory, stop_event=self.__stopped):  # type: ignore
             for change, path in change_tup:
-                if change != watchfiles.Change.modified:
+                if change != watchfiles.Change.modified or not path.endswith(".py"):
                     continue
 
-                extension = _get_ext_name(path)
+                extension = _get_extension_name(path)
                 if not extension in bot.extensions:
                     # Extension not loaded, so ignore
                     continue
