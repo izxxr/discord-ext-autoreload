@@ -25,7 +25,6 @@ def _get_ext_name(path: str) -> str:
     path = os.path.relpath(path).replace("/", "\\")
     comps = path.split("\\")
 
-    basename = comps.pop(-1)
     if comps[-1].endswith(".py"):
         # Strip the .py extension from the base name
         basename = comps.pop(-1)
