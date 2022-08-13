@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from typing import List, Optional
-from discord.utils import MISSING
+from discord.utils import MISSING, maybe_coroutine
 from discord.ext import commands
 
 import os
@@ -132,12 +132,9 @@ class Reloader:
 
     async def _reload_extension(self, bot: commands.Bot, extension: str) -> None:
         try:
-            coro = bot.reload_extension(extension)
-            # For compatiblity with 1.7
-            # In discord.py <2.0, reload_extension() is a
-            # not a coroutine function
-            if coro and asyncio.iscoroutine(coro):
-                await coro
+            # On discord.py v2.0 and later, reload_extension() is a
+            # coroutine function so maybe_coroutine() is used here
+            await maybe_coroutine(bot.reload_extension, extension)
         except commands.ExtensionFailed:
             await self.on_error(extension)
         else:
